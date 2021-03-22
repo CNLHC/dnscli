@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
+	"github.com/CNLHC/dnscli/config"
 	"github.com/CNLHC/dnscli/providers"
 	"github.com/CNLHC/dnscli/shim"
 	"github.com/spf13/cobra"
 )
+
+var logger = config.GetLogger()
 
 func GetCMD() *cobra.Command {
 	cmd := &cobra.Command{
@@ -45,8 +49,11 @@ func Auth() {
 		os.Exit(1)
 	}
 	r.Value = token
+	logger.Info().Msgf("ACME Auth for %+v", r)
 	provider.DeleteRecord(r)
 	err = provider.CreateRecord(r)
+	time.Sleep(time.Second * 3)
+
 	if err != nil {
 		panic(err)
 	} else {
