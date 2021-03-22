@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/CNLHC/dnscli/certbot"
+	"github.com/CNLHC/dnscli/cmd"
 	"github.com/CNLHC/dnscli/config"
 	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
@@ -32,6 +33,7 @@ func init() {
 	rootCmd.AddCommand(certbot.GetCMD())
 	cfg := config.GetGlobalConfig()
 	rootCmd.PersistentFlags().StringVar(&cfg.Dotfile, "dotfile", ".env", "dotfile (default is .env)")
+	cmd.DecorateRootCmd(rootCmd)
 
 }
 
