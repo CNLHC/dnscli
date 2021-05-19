@@ -31,6 +31,19 @@ func DecorateRootCmd(c *cobra.Command) {
 		},
 	}
 
+	del := &cobra.Command{
+		Use: "remove",
+		Run: func(c *cobra.Command, args []string) {
+			p := providers.GetDefaultProvider()
+			err := p.DeleteRecord(r)
+			if err != nil {
+				logger.Error().Msgf("err %+v", err)
+			} else {
+				logger.Info().Msg("success")
+			}
+		},
+	}
+
 	add_flags := add.Flags()
 
 	add_flags.StringVarP(&r.DomainName, "domain", "d", "", "base domain name")
@@ -39,12 +52,21 @@ func DecorateRootCmd(c *cobra.Command) {
 	add_flags.StringVarP(&r.Value, "value", "v", "", "value")
 	add_flags.BoolVar(&dry, "dry", false, "dry")
 
+	del_flags := del.Flags()
+	del_flags.StringVarP(&r.DomainName, "domain", "d", "", "base domain name")
+	del_flags.StringVarP(&r.Host, "rr", "r", "", "host name")
+	del_flags.BoolVar(&dry, "dry", false, "dry")
+
 	//TODO check
 	add.MarkFlagRequired("domain")
 	add.MarkFlagRequired("type")
 	add.MarkFlagRequired("host")
 	add.MarkFlagRequired("value")
 
+	del.MarkFlagRequired("domain")
+	del.MarkFlagRequired("rr")
+
 	c.AddCommand(add)
+	c.AddCommand(del)
 
 }

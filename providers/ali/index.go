@@ -2,6 +2,7 @@ package ali
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/CNLHC/dnscli/config"
 	"github.com/CNLHC/dnscli/shim"
@@ -42,7 +43,12 @@ func (c *aliProvider) UpdateRecord(r shim.DNSRecord) (err error) {
 	req.RR = r.Host
 	req.Type = string(r.Type)
 	req.Value = r.Value
-	_, err = c._client.UpdateDomainRecord(req)
+	res, err := c._client.UpdateDomainRecord(req)
+	if strings.Contains(res.BaseResponse.GetHttpContentString(), "DomainRecordDuplicate") {
+		err = nil
+
+	}
+
 	return
 }
 

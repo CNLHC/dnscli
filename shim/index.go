@@ -28,6 +28,15 @@ type DNSProvider interface {
 	ListRecord(domain string) ([]DNSRecord, error)
 }
 
+func UpdateOrCreate(p DNSProvider, r DNSRecord) error {
+	err := p.UpdateRecord(r)
+	if err != nil {
+		err = p.CreateRecord(r)
+		return err
+	}
+	return err
+}
+
 var (
 	ErrNoSuchRecord = errors.New("No Such Record")
 )
