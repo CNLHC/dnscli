@@ -1,0 +1,15 @@
+[Unit]
+Description=dnscli ddns service
+After=network.target
+
+[Service]
+Type=simple
+User=cn
+Restart=always
+RestartSec=5s
+ExecStart=/home/cn/operation/utility/dnscli/dnscli ddns
+WorkingDirectory=/home/cn/operation/utility/dnscli
+
+
+[Install]
+WantedBy=multi-user.target
